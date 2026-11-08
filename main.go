@@ -1,17 +1,23 @@
 package main
 
 import (
-	"net/http"
+	"log"
+
+	"github.com/F-hatopuku/homepage-app/handlers"
+	"github.com/joho/godotenv"
 
 	"github.com/gin-gonic/gin"
 )
 
 func main() {
+	if err := godotenv.Load(); err != nil {
+		log.Println("Error loading .env file")
+	}
+
 	router := gin.Default()
-	router.GET("/ping", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{
-			"message": "pong",
-		})
-	})
-	router.Run()
+	router.POST("/api/contact", handlers.ContactHandler)
+
+	if err := router.Run(":8080"); err != nil {
+		panic(err)
+	}
 }
